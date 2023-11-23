@@ -1,7 +1,6 @@
 package com.mol.rabbitmqproject.userservice.config;
 
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,10 +14,32 @@ import org.springframework.context.annotation.Configuration;
 public class UserAMQPConfig {
 
     @Bean
-    public Queue createQueue() {
+    public FanoutExchange userRegisteredEventExchange() {
+        return new FanoutExchange("user_registered_event_exchange");
+    }
+
+    @Bean
+    public Queue mailUserRegisteredQueue() {
         return QueueBuilder
-                    .nonDurable("users.registered")
+                    .nonDurable("mail.users.registered")
                     .build();
+    }
+
+    @Bean
+    public Binding bindingMailUserRegisteredQueue(Queue mailUserRegisteredQueue, FanoutExchange userRegisteredEventExchange) {
+        return BindingBuilder.bind(mailUserRegisteredQueue).to(userRegisteredEventExchange);
+    }
+
+    @Bean
+    public Queue scoreUserRegisteredQueue() {
+        return QueueBuilder
+                .nonDurable("score.users.registered")
+                .build();
+    }
+
+    @Bean
+    public Binding bindingScoreUserRegisteredQueue(Queue scoreUserRegisteredQueue, FanoutExchange userRegisteredEventExchange) {
+        return BindingBuilder.bind(scoreUserRegisteredQueue).to(userRegisteredEventExchange);
     }
 
     @Bean

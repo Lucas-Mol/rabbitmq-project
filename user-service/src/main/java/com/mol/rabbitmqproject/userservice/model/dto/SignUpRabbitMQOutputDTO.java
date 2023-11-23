@@ -2,14 +2,12 @@ package com.mol.rabbitmqproject.userservice.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record SignUpInputDTO(
+public record SignUpRabbitMQOutputDTO(
         @NotBlank
         String username,
         @NotBlank
-        String password,
-        @NotBlank
         String email,
-        String smsPhoneNumber,
-        String authenticatorProvider
+        @NotBlank
+        String score
 
 ) { }
