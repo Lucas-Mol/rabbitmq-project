@@ -43,6 +43,20 @@ public class UserAMQPConfig {
     }
 
     @Bean
+    public Queue mailNewLocationUserQueue() {
+        return QueueBuilder
+                .nonDurable("user.new.location.mail.queue")
+                .build();
+    }
+
+    @Bean
+    public Queue login2FASMSQueue() {
+        return QueueBuilder
+                .nonDurable("user.login.2fa.SMS.queue")
+                .build();
+    }
+
+    @Bean
     public RabbitAdmin createRabbitAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
