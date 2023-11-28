@@ -22,6 +22,7 @@ public class UserAMQPConfig {
     public Queue mailUserRegisteredQueue() {
         return QueueBuilder
                     .nonDurable("mail.users.registered")
+                    .deadLetterExchange("mail_users_registered_dlx")
                     .build();
     }
 
@@ -54,6 +55,22 @@ public class UserAMQPConfig {
         return QueueBuilder
                 .nonDurable("user.login.2fa.SMS.queue")
                 .build();
+    }
+    @Bean
+    public FanoutExchange mailUserRegisteredDlx() {
+        return new FanoutExchange("mail_users_registered_dlx");
+    }
+
+    @Bean
+    public Queue mailUserRegisteredDlq() {
+        return QueueBuilder
+                .nonDurable("mail.users.registered.dlq")
+                .build();
+    }
+
+    @Bean
+    public Binding bindingUserWelcomeEmailDlq(Queue mailUserRegisteredDlq, FanoutExchange mailUserRegisteredDlx) {
+        return BindingBuilder.bind(mailUserRegisteredDlq).to(mailUserRegisteredDlx);
     }
 
     @Bean

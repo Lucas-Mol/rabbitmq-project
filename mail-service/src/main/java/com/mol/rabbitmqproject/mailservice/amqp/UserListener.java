@@ -11,10 +11,10 @@ import java.util.Random;
 public class UserListener {
 
     @RabbitListener(queues = "mail.users.registered")
-    public void receiveUserRegisteredMail(UserRegisteredDTO userRegistered){
+    public void receiveUserRegisteredMail(UserRegisteredDTO registeredUser){
         simulateError();
 
-        System.out.println("Supposedly sending a welcome mail to " + userRegistered.email());
+        System.out.println("Supposedly sending a welcome mail to " + registeredUser.email());
     }
 
     @RabbitListener(queues = "user.new.location.mail.queue")
@@ -37,7 +37,7 @@ public class UserListener {
         var random = new Random();
         var randomNum = random.nextInt(5);
 
-        if(randomNum == 3)
+        if(true)
             throw new RuntimeException("Mail provider error");
     }
 }
